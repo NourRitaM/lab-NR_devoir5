@@ -4,8 +4,8 @@ This is the React version of my Weather Dashboard from Assignment 4. You type a 
 
 The data comes from [Open-Meteo](https://open-meteo.com/), which is free and needs no API key, so there is nothing to configure.
 
-**GitHub:** <put your repository link here>
-
+**GitHub:** 
+https://github.com/NourRitaM/lab-NR_devoir5
 ## Run it
 
 You need Node.js installed.
