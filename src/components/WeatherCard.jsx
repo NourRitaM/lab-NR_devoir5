@@ -1,5 +1,6 @@
 import WeatherDetail from "./WeatherDetail";
-//decide to use open meteo instead of open weather because it is free and does not require an API key. Open weather requires an API key and has a limit of 60 calls per minute, which is not enough for this app. Open meteo has no limit and does not require an API key.
+//decide to use open meteo instead of open weather because it is free and does not require an API key. Open weather requires an API key and has a limit of 60 calls per minute, which is not enough for this app. 
+// Open-Meteo has much higher free limits and does not require an API key
 // Open-Meteo sends a weather code (number) instead of a text, this turns it into a description.
 function getDescription(code) {
     if (code === 0) return "Clear sky";
