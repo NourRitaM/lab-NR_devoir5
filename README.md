@@ -1,117 +1,54 @@
 # Weather Website (React)
 
-This project is the React version of my Weather Dashboard (Assignment 4). It is built with React and Vite, and it fetches real-time data from Open-Meteo (a free weather service that needs no account and no API key) to display the current weather for a city entered by the user.
+This is the React version of my Weather Dashboard from Assignment 4. You type a city, and the app shows its current weather: temperature, description, humidity, wind speed and an icon. It opens on Beirut by default so the page is never empty.
 
-## Project Goal
+The data comes from [Open-Meteo](https://open-meteo.com/), which is free and needs no API key, so there is nothing to configure.
 
-The app allows the user to type a city name, click the search button (or press Enter), and instantly see the current weather conditions, including:
-- temperature
-- city and country
-- weather description
-- humidity
-- wind speed
-- a matching weather icon
+**GitHub:** <put your repository link here>
 
-The page also loads a default city (Beirut) when it opens, so the user sees weather data immediately.
+## Run it
 
-## Setup and Run
-
-No API key and no account are needed, so there is nothing to configure.
-
-1. Make sure Node.js is installed on your computer.
-2. Install the dependencies:
+You need Node.js installed.
 
 ```bash
 npm install
-```
-
-3. Start the dev server:
-
-```bash
 npm run dev
 ```
 
-4. Open the link shown in the terminal (usually http://localhost:5173).
+Then open the link shown in the terminal (usually http://localhost:5173).
 
-## Project Structure
+## How I split the app
 
 ```
 src/
-  main.jsx                  -> starts the React app
-  App.jsx                   -> main component, holds the state and does the fetch
+  main.jsx                 starts the app
+  App.jsx                  parent: holds the state and does the fetching
   components/
-    SearchBar.jsx           -> input + search button
-    LoadingSpinner.jsx      -> "Loading..." message
-    ErrorMessage.jsx        -> error message
-    WeatherCard.jsx         -> the weather card
-    WeatherDetail.jsx       -> one detail of the card (humidity or wind)
-  styles/
-    style.css               -> same design as Assignment 4
+    SearchBar.jsx          input + search button
+    LoadingSpinner.jsx     "Loading..." message
+    ErrorMessage.jsx       shows an error
+    WeatherCard.jsx        the weather card
+    WeatherDetail.jsx      one small block (humidity or wind)
+  styles/style.css         same design as Assignment 4
 ```
 
-## Components
+`App` is the only component that talks to the API. It keeps `city`, `searchCount`, `weather`, `loading` and `error` in state, and decides what to show: the loading message, the error, or the weather card.
 
-### `App.jsx`
-The parent of everything. It contains:
-- the state: `city`, `searchCount`, `weather`, `loading` and `error` (with `useState`)
-- the `useEffect` that fetches the data from Open-Meteo every time `city` or `searchCount` changes (first it finds the city, then it gets its current weather)
-- `handleSearch`, the function the search bar calls
-- the conditional rendering of the loading message, the error message and the weather card
+`SearchBar` keeps what the user is typing (`inputValue`) in its own state, because no other component needs it. When the user clicks the button or presses Enter, it calls `onSearch`, a function passed down from `App`.
 
-### `SearchBar.jsx`
-Contains the input and the search button. It keeps what the user is typing in its own state (`inputValue`) and calls `onSearch` (a prop from `App`) when the user clicks the button or presses Enter. The button is disabled while loading.
+`WeatherCard` receives the `weather` object and turns Open-Meteo's weather code into a text description and an icon. It then uses `WeatherDetail` twice, for humidity and wind.
 
-### `LoadingSpinner.jsx`
-Shows the loading message while the request is running.
+## State, effect and props
 
-### `ErrorMessage.jsx`
-Shows the error text it receives in the `message` prop.
+- **useEffect:** it fetches the weather whenever `city` or `searchCount` changes. It first looks up the city's coordinates, then asks for the weather at those coordinates. It also cancels the previous request with an `AbortController` if the user searches again before the first one finishes.
+- **Why `searchCount`?** If a search fails (for example no internet) and the user clicks again with the same city, `city` doesn't change, so the effect wouldn't run. Increasing `searchCount` on every search fixes that.
+- **Lifting state up:** the result is displayed by components other than the one where the user types, so `weather`, `loading` and `error` live in `App`.
+- **Prop drilling:** data never goes more than two levels deep (`App` -> `WeatherCard` -> `WeatherDetail`), so I didn't need context or any extra tool.
 
-### `WeatherCard.jsx`
-Receives the weather data in the `weather` prop and displays the temperature, city, description and the icon. The icon is chosen with a `getIconClass` function like in Assignment 4 (but it uses Open-Meteo weather codes), and `getDescription` turns the code into a text. It also renders two `WeatherDetail` components.
+## Error handling
 
-### `WeatherDetail.jsx`
-Small reusable component used for humidity and wind speed (icon + value + label).
+The app shows a message for an empty search, a city that doesn't exist, a network problem, or the API's rate limit. The search button is disabled while a request is running.
 
-## State Management and Props
+## Built with
 
-- `useState` is used in `App` (city, searchCount, weather, loading, error) and in `SearchBar` (inputValue).
-- `useEffect` is used in `App` to fetch the weather. Its dependency array is `[city, searchCount]`, so it runs when the page opens and every time the user makes a new search. It also has a cleanup function that cancels the old request (`AbortController`) if the user searches again before it ends.
-- Props go from parent to child: `App` -> `SearchBar` (`onSearch`, `disabled`), `App` -> `ErrorMessage` (`message`), `App` -> `WeatherCard` (`weather`) and `WeatherCard` -> `WeatherDetail` (`iconClass`, `value`, `label`).
-- **Lifting state up:** the search result has to be shown by other components than the one where the user types, so `city`, `weather`, `loading` and `error` live in `App`, and `SearchBar` sends the typed city up with the `onSearch` function. Only `inputValue` stays inside `SearchBar` because nobody else needs it.
-- **Prop drilling:** the data never goes deeper than two levels (`App` -> `WeatherCard` -> `WeatherDetail`), so no context or extra tool was needed.
-
-## How the App Works
-
-1. The user enters a city name into the input field.
-2. `App` checks whether the value is empty.
-3. The `useEffect` sends a request to find the city, then another one to get its weather, and the loading message is shown.
-4. If the responses are successful, the weather card is displayed.
-5. If there is a problem, it shows a message such as:
-   - city not found
-   - network error
-   - rate limit reached
-6. The search button is temporarily disabled while loading to prevent repeated requests.
-
-## Security
-
-Open-Meteo does not use an API key, so there is no secret to hide and nothing to keep out of GitHub.
-
-## Notes
-
-This project is used to practice:
-- building a UI as a tree of React components
-- managing state with `useState`
-- fetching data with `useEffect`
-- passing data with props
-- displaying loading and error states
-- building a responsive website
-
-## Technologies Used
-
-- React
-- Vite
-- JavaScript (JSX)
-- CSS
-- Open-Meteo API (weather + geocoding)
-- Font Awesome
+React, Vite, plain CSS, Open-Meteo (weather + geocoding) and Font Awesome for the icons.
