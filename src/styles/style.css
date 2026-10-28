@@ -1,0 +1,203 @@
+*{ /* universal selector -> applies to every element */
+    margin:0;
+    padding:0;
+    font-family: Arial, sans-serif;
+    box-sizing:border-box;
+}
+
+.container{
+    width:100%;
+    min-height:100vh; /* 100% of the browser window height */
+    background:linear-gradient(135deg, rgb(163, 214, 247), #e3abf0);
+    padding:60px 10px 40px;
+    /* flex column so the search bar and the weather card are centered */
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+/*fo the search bar when we enter the city name */
+.search{
+    width:100%;
+    max-width:480px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#c8e8f2;
+    border-radius:20px;
+    padding-left:20px;
+    margin-bottom:20px;
+}
+
+.search input{
+    flex:1;
+    min-width:0; /* lets the input shrink on small screens */
+    border:none;
+    outline:none;
+    background:transparent; /* transparent so it blends into the bar */
+    padding:10px;
+    font-weight:400;
+    font-size:18px;
+}
+
+.search button{
+    border:none;
+    outline:none;
+    padding:16px 22px;
+    background:#4a1a6e;
+    color:#fff;
+    font-size:16px;
+    cursor:pointer;
+    border-radius:40px;
+    transition:background 180ms ease;
+}
+
+.search button:hover{
+    background:#6b2a9a;
+}
+
+.search button:disabled{ /* while the request is running */
+    background:#999;
+    cursor:not-allowed;
+}
+
+/* ---------- LOADING + ERROR MESSAGES ---------- */
+/* these are only rendered by React when needed, so no display:none anymore */
+.loading{
+    width:100%;
+    max-width:480px;
+    text-align:center;
+    background:#dff3fa;
+    color:#002765;
+    font-size:18px;
+    padding:14px;
+    border-radius:10px;
+    margin-bottom:20px;
+    animation:pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse{
+    0%,100%{ opacity:1; }
+    50%{ opacity:0.4; }
+}
+
+.error{
+    width:100%;
+    max-width:480px;
+    text-align:center;
+    background:#ffe0e6;
+    color:#b00020;
+    border:1px solid #b00020;
+    font-size:16px;
+    padding:14px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+/* ---------- WEATHER CARD ---------- */
+.weather{
+    width:100%;
+    max-width:480px;
+    background:#dff3fa;
+    border-radius:10px;
+    padding:40px 30px;
+    text-align:center;
+    color:#002765;
+}
+
+.weather-icon{
+    font-size:90px;
+    color:#4a1a6e;
+    margin-bottom:10px;
+}
+
+.temp{
+    font-size:64px;
+    font-weight:500;
+}
+
+.city{
+    font-size:36px;
+    font-weight:400;
+    margin-top:5px;
+}
+
+.description{
+    font-size:18px;
+    color:#555;
+    margin-top:5px;
+    margin-bottom:30px;
+}
+
+/* humidity + wind side by side */
+.details{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    background:#c8e8f2;
+    border-radius:20px;
+    padding:20px;
+}
+
+.col{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-align:left;
+}
+
+.col i{
+    font-size:36px;
+    color:#4a1a6e;
+}
+
+.detail-value{
+    font-size:22px;
+    font-weight:500;
+}
+
+.col p{
+    font-size:14px;
+}
+
+/* ---------- MOBILE FRIENDLY ---------- */
+@media (max-width:560px){
+    .container{
+        padding:30px 10px 30px;
+    }
+
+    .search input{
+        font-size:16px;
+    }
+
+    .search button{
+        padding:12px 18px;
+    }
+
+    .weather{
+        padding:28px 18px;
+    }
+
+    .weather-icon{
+        font-size:70px;
+    }
+
+    .temp{
+        font-size:48px;
+    }
+
+    .city{
+        font-size:28px;
+    }
+
+    .details{
+        flex-direction:column;
+        align-items:flex-start;
+        padding:16px 24px;
+    }
+
+    .col i{
+        font-size:30px;
+    }
+}
