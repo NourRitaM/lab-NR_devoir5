@@ -1,5 +1,5 @@
 import WeatherDetail from "./WeatherDetail";
-
+//decide to use open meteo instead of open weather because it is free and does not require an API key. Open weather requires an API key and has a limit of 60 calls per minute, which is not enough for this app. Open meteo has no limit and does not require an API key.
 // Open-Meteo sends a weather code (number) instead of a text, this turns it into a description.
 function getDescription(code) {
     if (code === 0) return "Clear sky";
@@ -15,8 +15,8 @@ function getDescription(code) {
     if (code >= 95) return "Thunderstorm";
     return "Unknown";
 }
-
-// Choose a Font Awesome icon based on the current weather condition.
+// kept this in WeatherCard and not in its own file because only the card uses it
+// Choose a Font icon based on the current weather condition.
 function getIconClass(code, isDay) {
     if (code === 0 || code === 1) {
         return isDay ? "fa fa-sun-o weather-icon" : "fa fa-moon-o weather-icon";
@@ -49,7 +49,7 @@ function WeatherCard({ weather }) {
                     value={weather.humidity + "%"}
                     label="Humidity"
                 />
-                {/* fa-flag is for the wind icon, the API already gives the wind speed in km/h */}
+                {/* fa-flag is for the wind icon, already gives the wind speed in km/h */}
                 <WeatherDetail
                     iconClass="fa fa-flag"
                     value={Math.round(weather.wind) + " Km/h"}

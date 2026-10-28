@@ -40,7 +40,7 @@ function App() {
                 }
 
                 const geoData = await geoResponse.json();
-
+                 // the API sends no "results" at all when the city does not exist, not an empty error
                 // when the city does not exist the API sends no "results" at all.
                 if (!geoData.results || geoData.results.length === 0) {
                     throw new Error("City not found. Please check the spelling and try again.");
@@ -97,8 +97,8 @@ function App() {
 
         // cleanup: cancel the old request when the effect runs again.
         return () => controller.abort();
-    }, [city, searchCount]);
-
+    }, [city, searchCount]);  // [city, searchCount] -> if i leave this empty the effect only runs once
+             
     // Called by the SearchBar when the user clicks the button or presses Enter.
     function handleSearch(searchedCity) {
         if (searchedCity.trim() === "") {
@@ -107,7 +107,7 @@ function App() {
         }
 
         setCity(searchedCity.trim());
-        setSearchCount((count) => count + 1);
+        setSearchCount((count) => count + 1); // had to add this because searching the same city twice did nothing
     }
 
     return (

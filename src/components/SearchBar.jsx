@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // User types the name of a city into the search bar.
-// onSearch and disabled come from App (props).
+// onSearch and disabled come from App .
 function SearchBar({ onSearch, disabled }) {
     // what the user is typing right now, only the search bar needs it so it stays here.
     const [inputValue, setInputValue] = useState("");
